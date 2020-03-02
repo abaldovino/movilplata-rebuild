@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function InteractionPanel(props) {
   const userData = props.userData ? JSON.parse(props.userData) : null
-  debugger
   const role = userData.userRoles.some(el => el.name === "Commerce Admin") ? 'admin' : 'user'
   const classes = useStyles();
   let masiveButton;
@@ -33,7 +32,7 @@ export default function InteractionPanel(props) {
 
   if(role === 'admin'){
     column = 3
-    masiveButton = <CardPos />
+    masiveButton = <CardPos title='MOVIL Recarga masiva' subtitle="Recarga varios usuarios con solo un click" movilAction={() => props.handleClick('masive')}/>
   }
 
   return (
@@ -41,15 +40,20 @@ export default function InteractionPanel(props) {
       <CssBaseline />
       <Container maxWidth="lg">
         <Grid container spacing={3}>
-          <Grid item xs={4}>
+          <Grid item xs={column}>
             <CardPos title='MOVIL Cobro' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('cobro')}/>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={column}>
             <CardPos title='MOVIL Retiro' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('retiro')}/>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={column}>
             <CardPos title='MOVIL Recarga' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('recarga')}/>
           </Grid>
+          { role === 'admin' ? (
+            <Grid item xs={3}>
+              { masiveButton }
+            </Grid>
+          ) : ( null ) }
         </Grid>
       </Container>
     </Box>

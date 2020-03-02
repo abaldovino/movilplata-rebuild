@@ -21,7 +21,8 @@
     "react-loader-spinner": "^3.1.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "react-toastify": "^5.5.0"
+    "react-toastify": "^5.5.0",
+    "vertx3-eventbus-client": "^3.8.5"
   },
   "scripts": {
     "start": "react-scripts start",

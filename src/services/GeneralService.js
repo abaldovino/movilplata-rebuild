@@ -10,6 +10,12 @@ class GeneralService {
     })
     return res.data
   }
+  getUserById = async (data) => {
+    const encodedString = new Buffer(`${data.username}:${data.password}`).toString('base64');
+    const basicAuth = 'Basic ' + encodedString;
+    let res = await axios.get(`${Config.api.dev.baseHost}/api/secure/users?username=${data}`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
+    return res.data
+  }
 }
 
 export default GeneralService;

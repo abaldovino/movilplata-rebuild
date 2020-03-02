@@ -13,6 +13,8 @@ import Page from '../../../helpers/Page'
 import Header from '../../../helpers/Header'
 import { useAuth } from '../../../contexts/Auth'
 
+import SucursalService from '../../../services/SucursalService'
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -39,6 +41,18 @@ export default function Pos(props) {
     setShowPanel(!showModalPanel)
     setContentPanel(content)
   }
+
+  useEffect(() => {
+    setUserData(authTokens)
+    const sucursalService = new SucursalService()
+    sucursalService.ListService(currentComerce, userDataFull).then((response) => {
+      if(response.data.code === 500) {
+        localStorage.removeItem("tokens");
+      } else {
+        setSucursales(response.data)
+      }
+    })
+  }, []);
 
   const classes = useStyles();
   return (
