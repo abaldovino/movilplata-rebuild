@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function InteractionPanel(props) {
-  const userData = props.userData ? JSON.parse(props.userData) : null
+  const userData = props.userData ? props.userData: null
   const role = userData.userRoles.some(el => el.name === "Commerce Admin") ? 'admin' : 'user'
   const classes = useStyles();
   let masiveButton;
@@ -40,17 +40,17 @@ export default function InteractionPanel(props) {
       <CssBaseline />
       <Container maxWidth="lg">
         <Grid container spacing={3}>
-          <Grid item xs={column}>
+          <Grid item xs={12} md={column}>
             <CardPos title='MOVIL Cobro' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('cobro')}/>
           </Grid>
-          <Grid item xs={column}>
+          <Grid item xs={12} md={column}>
             <CardPos title='MOVIL Retiro' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('retiro')}/>
           </Grid>
-          <Grid item xs={column}>
+          <Grid item xs={12} md={column}>
             <CardPos title='MOVIL Recarga' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('recarga')}/>
           </Grid>
           { role === 'admin' ? (
-            <Grid item xs={3}>
+            <Grid item xs={12} md={column}>
               { masiveButton }
             </Grid>
           ) : ( null ) }

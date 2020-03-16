@@ -57,7 +57,7 @@ const CreateSucursal = props => {
   const classes = useStyles();
 
   const userData = props.userData ? props.userData : {}
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, reset } = useForm()
   const [isLoading, setLoading] = useState(false);
   const [cities, setCities] = useState([]);
   const [currentLatLang, setLangLat] = useState({});
@@ -139,9 +139,10 @@ const CreateSucursal = props => {
       if(response.description === "Success"){
           setLoading(!isLoading)
           toast.success("Sucursal Creada !");
-          //TODO acomodar redireccion
+          reset()
           props.history.push('/admin/sucursal_list')
         } else {
+          reset()
           toast.error(response.description);  
         }  
      })

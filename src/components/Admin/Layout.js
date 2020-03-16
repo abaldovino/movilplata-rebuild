@@ -24,7 +24,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Link } from 'react-router-dom';
 import theme from '../../theme/index'
 import { Home, HomeWork, ViewList, Payment, Loyalty, AttachMoney } from '@material-ui/icons';
-
+import { useAuth } from "../../contexts/Auth";
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Layout({ children }, props) {
-
+  const { setAuthTokens } = useAuth();
   const { container } = props;
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -80,6 +80,8 @@ function Layout({ children }, props) {
 
   const handleClose = () => {
     setAnchorEl(null);
+    setAuthTokens();
+    localStorage.removeItem("tokens");
   };
 
   const handleDrawerToggle = () => {
@@ -111,14 +113,14 @@ function Layout({ children }, props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {[{name: 'Home', url:'/admin/home', icon: '1'}, 
-          {name: 'Crear sucursal', url:'/admin/sucursal/create', icon: '2' }, 
-          {name: 'Listado de sucursales', url:'/admin/sucursal/index', icon: '3' },
-          {name: 'POS', url:'/admin/pos', icon: '4' },
-          {name: 'Fidelizacion', url:'/admin/', icon: '5' },
-          {name: 'Reporte Diario', url:'/admin/reports/daily', icon: '6' },
+        {[{name: 'Home', url:'/admin/home', icon: '1', disabled: false}, 
+          {name: 'Crear sucursal', url:'/admin/sucursal/create', icon: '2', disabled: false }, 
+          {name: 'Listado de sucursales', url:'/admin/sucursal/index', icon: '3', disabled: false },
+          {name: 'POS', url:'/admin/pos', icon: '4', disabled: false },
+          {name: 'Fidelizacion', url:'/admin/', icon: '5', disabled: true },
+          {name: 'Reporte Diario', url:'/admin/reports/daily', icon: '6', disabled: false },
         ].map((hash, index) => (
-          <ListItem button component={Link} to={hash.url} key={index}>
+          <ListItem button component={Link} to={hash.url} key={index} disabled={hash.disabled}>
             <ListItemIcon>
               { renderSwitch(hash.icon) }
             </ListItemIcon>
@@ -162,8 +164,6 @@ function Layout({ children }, props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </Toolbar>

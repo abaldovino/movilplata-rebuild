@@ -20,16 +20,25 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [authTokens, setAuthTokens] = useState();
+
+  const userInfo = localStorage.getItem("userData") != null ? JSON.parse(localStorage.getItem("userData")) : null; 
+  const tokens = localStorage.getItem("tokens") != null ? JSON.parse(localStorage.getItem("tokens")) : null; 
+  const [authTokens, setAuthTokens] = useState(tokens ? tokens : false);
+  const [userData, setUserData] = useState(userInfo ? userInfo : false)
   
   const setTokens = (data) => {
     localStorage.setItem("tokens", JSON.stringify(data));
-    setAuthTokens(JSON.stringify(data));
+    setAuthTokens(data);
+  }
+
+  const setStoreUser = (data) => {
+    localStorage.setItem("userData", JSON.stringify(data));
+    setUserData(data)
   }
 
   return (
     <ErrorBoundary>
-      <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+      <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, disableToken: setTokens, userData, setUserData: setStoreUser }}>
         <Router>
         <ToastContainer 
             position="bottom-left"
@@ -46,7 +55,7 @@ function App() {
             <Route exact path="/" component={ Home } />
             <Route path="/privacy" component={ Privacy } />
             <Route path="/terms" component={ Terms } />
-            <Route path="/auth" component={ Auth } />
+            <Route path="/login" component={ Auth } />
             <PrivateRoute path="/admin/home" component={ () => <Admin userData={ authTokens } /> } />
             <PrivateRoute path="/admin/sucursal/create" component={ () => <CreateSucursal userData={ authTokens } /> } />
             <PrivateRoute path="/admin/sucursal/index" component={ () => <IndexSucursal userData={ authTokens } /> } />

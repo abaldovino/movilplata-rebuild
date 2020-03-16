@@ -12,7 +12,7 @@ import {
   Divider,
   TextField,
   CircularProgress,
-  Paper,
+  Box,
   colors,
   IconButton,
   Link
@@ -27,7 +27,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify';
 import GeneralService from '../../../../services/GeneralService'
 import PosService from '../../../../services/PosService'
-
+import SweetAlert from 'sweetalert2-react';
 import cobroImg from '../../../../assets/image/admin/cobro.png'
 
 
@@ -107,17 +107,19 @@ const RetiroForm = props => {
 
   const onSubmit = data => {
     setLoading(true)
-    const token = props.sucursales.filter((sucursal) => { return sucursal.id == data.sucursal })[0].token
+    const token = props.sucursales.filter((sucursal) => { return sucursal.id === parseInt(data.sucursal) })[0].token
     setBranchToken(token)
     setData(data)
     let posService = new PosService()
-    posService.SendPaymentRequest(data, props.userData.commerce.id, props.userData).then( async response => {
+    posService.SendPaymentRequest(data, props.userData.commerce.id, userID).then( async response => {
       if(response.description === 'Success'){
         setLoading(false)
         toast.info("Retiro esperando aprobacion. !", toastSuccess);
         console.log(token)
         setRefId(response.data.idTransactionReference)
         receiveConfirmation(token)
+        userSetted(false)
+        setSearchUser(false)
       }else{
         switch (response.statusCode) {
           case 1414:
@@ -129,6 +131,8 @@ const RetiroForm = props => {
         setLoading(false)
         toast.error("Retiro fallida!", toastError); 
         console.log(response)
+        userSetted(false)
+        setSearchUser(false)
       }
     })
   }
@@ -138,14 +142,14 @@ const RetiroForm = props => {
     console.log(formData)
     console.log(props)
     let posService = new PosService()
-    posService.SendConfirmationPaymentRequest(formData, props.userData.commerce.id, refId).then( async response => {
+    posService.SendConfirmationPaymentRequest(formData, props.userData.commerce.id, refId, userID).then( async response => {
       console.log('RetiroConfirmadoService', response)
     })
 
   }
 
   const receiveConfirmation = (branchToken) => {
-    const eb = new Vertx("http://216.55.185.219:18081/api/notification/eventbus");
+    const eb = new Vertx("http://104.198.149.31:18081/api/notification/eventbus");
     eb.handlers = branchToken  
     eb.onopen = () => {
       const token = eb.handlers;
@@ -185,18 +189,18 @@ const RetiroForm = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <form onSubmit={handleSubmit}>
-        <CardHeader title="Movil Retiro" action={
-        <IconButton aria-label="settings">
-          <Link href="/admin/home" onClick={preventDefault}>
-            <ClearIcon />
-          </Link>
+      <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
+      <CardHeader title="Movil Retiro" action={
+        <IconButton aria-label="settings" onClick={() => props.handleClick()}>
+          <ClearIcon />
         </IconButton>
         }/>
         <Divider />
         <CardContent>
         {isLoading ? (
-            <CircularProgress/>
+            <Box component="span" style={{ display:'flex', justifyContent:'center', alignContent:'center' }}>
+              <CircularProgress/>
+            </Box>
           ) : (
             <Grid
             container
@@ -214,7 +218,7 @@ const RetiroForm = props => {
               md={6}
               xs={12}
             >
-            <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
+            
               <Grid 
                 container
                 spacing={2}
@@ -234,7 +238,7 @@ const RetiroForm = props => {
                   {userSet ? (
                     <React.Fragment>
                       <Grid item md={12} xs={12} >
-                        <TextField fullWidth label="Ingresa el valor a recargar" name="amount" required
+                        <TextField fullWidth label="Ingresa el valor a retirar" name="amount" required
                           variant="outlined"  inputRef={register({ required: true, maxlength: 20 })}
                           helperText="Ingresa el valor a retirar"
                         />
@@ -275,7 +279,6 @@ const RetiroForm = props => {
                     </React.Fragment>
                   ) : ( null )}
                 </Grid>
-              </form>
             </Grid>
           </Grid>
           )}
@@ -289,6 +292,19 @@ const RetiroForm = props => {
         ) }
         </CardActions>
       </form>
+        { alertShow ? <SweetAlert
+          show={alertShow}
+          title="Confirmacion de retiro"
+          text="Desea continuar con el proceso?"
+          showCancelButton
+          onConfirm={() => confirmWithdraw(refId)}
+          onCancel={() => {
+            console.log('cancel');
+            setShowAlert(!alertShow);
+          }}
+          onEscapeKey={() => setShowAlert(!alertShow)}
+          onOutsideClick={() => setShowAlert(!alertShow)}
+        /> : null }
     </Card>
   );
 };

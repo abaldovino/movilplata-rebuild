@@ -4,7 +4,7 @@ import Config from './../config/index'
 
 class AuthService {
   async login(data){
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/user/login?username=${data.username}&password=${data.password}`)
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/user/login?username=${data.username}&password=${data.password}`)
     res.data.data.password = data.password //temporal fix TODO implement oauth token
     return res.data
   }
@@ -13,7 +13,7 @@ class AuthService {
     const headers = {
       'Content-Type': 'application/json'
     }
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/user/register/seller`, getFormatData(data), {
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/user/register/seller`, getFormatData(data), {
       headers: headers
     })
     .then(function (response) {

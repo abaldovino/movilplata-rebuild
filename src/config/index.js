@@ -5,8 +5,8 @@ const config = {
       authHost: 'http://localhost:7080/auth'
     },
     staging:{
-      baseHost: 'http://216.55.185.219:18083',
-      authHost: 'http://216.55.185.219:7080/auth'
+      baseHost: 'https://staging-movilplata.homeip.net',
+      authHost: 'https://staging-movilplata.homeip.net/auth'
     },
     production:{
       baseHost: 'http://216.55.185.219:18083',

@@ -24,13 +24,12 @@ const ModalPanel = (props) => {
   const classes = useStyles();
   const [Sucursales, setSucursales] = useState(props.sucursales);
   const userData = typeof(props.userData) === 'string' ? JSON.parse(props.userData) : props.userData
-
   return (
       <React.Fragment>
-        {props.content === 'cobro' ? <CobroForm userData={userData} sucursales={props.sucursales}/>
-          : props.content === 'retiro' ? <RetiroForm sucursales={props.sucursales} userData={userData}/>
-          : props.content === 'recarga' ? <RecargaForm userData={userData} /> 
-          : <MasiveRecharge userData={userData} />
+        {props.content === 'cobro' ? <CobroForm userData={userData} sucursales={props.sucursales} handleClick={() => props.handleClick()}/>
+          : props.content === 'retiro' ? <RetiroForm sucursales={props.sucursales} userData={userData} handleClick={() => props.handleClick()}/>
+          : props.content === 'recarga' ? <RecargaForm userData={userData} handleClick={() => props.handleClick()}/> 
+          : <MasiveRecharge userData={userData} handleClick={() => props.handleClick()}/>
         }
       </React.Fragment>
   )

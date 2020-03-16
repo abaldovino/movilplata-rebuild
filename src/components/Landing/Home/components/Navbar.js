@@ -27,7 +27,7 @@ export default function Navbar() {
           <AnchorLink href='#contact' offset='70'>CONTACTANOS</AnchorLink>
         </div>
         <div className="nav-buttons">
-          <Link to='/auth' className='nav-btn'>Entrar</Link>
+          <Link to='/login' className='nav-btn'>Entrar</Link>
         </div>
         <div className="burguer-btn" onClick={ () => showTab() }>
           <div></div>
@@ -43,7 +43,7 @@ export default function Navbar() {
         <AnchorLink href='#download' offset='-70'>DESCARGAR APP</AnchorLink>
         <AnchorLink href='#contact' offset='70'>CONTACTANOS</AnchorLink>
 
-        <Link to='/auth' className='nav-btn'>Entrar</Link>
+        <Link to='/login' className='nav-btn'>Entrar</Link>
       </div>
     </header>
   )

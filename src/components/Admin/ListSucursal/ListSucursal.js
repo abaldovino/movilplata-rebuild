@@ -207,7 +207,7 @@ const useStyles = makeStyles(theme => ({
 
 const ListSucursal = props => {
   const classes = useStyles();
-  const userData = props.userData ? JSON.parse(props.userData) : {}
+  const userData = props.userData ? props.userData : {}
   let currentComerceFetch = userData ? userData.commerce : {}
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -226,7 +226,13 @@ const ListSucursal = props => {
         localStorage.removeItem("tokens");
       } else {
         console.log('componentDidMountList', response.data)
-        const rows = response.data.map(( sucursal )=> createData(sucursal.name, sucursal.city.name, sucursal.address, sucursal.email))
+        const rows = response.data.map(( sucursal ) => {
+          if(sucursal != null){
+            return createData(sucursal.name, sucursal.city.name, sucursal.address, sucursal.email)
+          }else{
+            return createData('invalid data', 'invalid data', 'invalid data', 'invalid data')
+          }
+        })
         setSucursales(rows)
         setLoading(false)
       }

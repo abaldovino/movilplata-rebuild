@@ -15,7 +15,7 @@ function PrivateRoute({ component: Component, ...rest }) {
           </Layout>
         ) : (
           <Redirect
-            to={{ pathname: "/auth", state: { referer: props.location } }}
+            to={{ pathname: "/login", state: { referer: props.location } }}
           />
         )
       }

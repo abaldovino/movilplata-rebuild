@@ -2,10 +2,12 @@
   "name": "movilplatav2",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://104.198.149.31:18083",
   "dependencies": {
     "@material-ui/core": "^4.9.3",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.43",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -22,6 +24,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-toastify": "^5.5.0",
+    "sweetalert": "^2.1.2",
+    "sweetalert2-react": "^0.8.3",
     "vertx3-eventbus-client": "^3.8.5"
   },
   "scripts": {

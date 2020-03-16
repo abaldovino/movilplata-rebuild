@@ -79,7 +79,7 @@ const MasiveRecharge = props => {
     formData.append('file', fileState)
     const encodedString = new Buffer(`${userData.username}:${userData.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    axios.post(`http://216.55.185.219:18083/api/secure/payment/transaction/user/${userData.id}/transfer/multi/upload`, formData, { withCredentials: true, contentType: 'application/json',  
+    axios.post(`http://104.198.149.31:18083/api/secure/payment/transaction/user/${userData.id}/transfer/multi/upload`, formData, { withCredentials: true, contentType: 'application/json',  
     headers: { 'Authorization': basicAuth }})
       .then(res => { // then print response status
         receiveNotificationSuccess(userData.username)
@@ -103,7 +103,7 @@ const MasiveRecharge = props => {
   } 
 
   const receiveNotificationSuccess = (username) => {
-    const eb = new Vertx("http://216.55.185.219:18081/api/notification/eventbus");
+    const eb = new Vertx("http://104.198.149.31:18081/api/notification/eventbus");
     eb.handlers = `wallet-service-address-${username}`
     eb.onopen = () => {
       const token = eb.handlers;
@@ -137,14 +137,12 @@ const MasiveRecharge = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <form onSubmit={handleSubmit}>
-        <CardHeader title="Recarga Masiva" action={
-        <IconButton aria-label="settings">
-          <Link href="/admin/home" onClick={preventDefault}>
+      <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
+        <CardHeader title="Movil Recarga Masiva" action={
+          <IconButton aria-label="settings" onClick={() => props.handleClick()}>
             <ClearIcon />
-          </Link>
-        </IconButton>
-        }/>
+          </IconButton>
+          }/>
         <Divider />
         <CardContent>
         {isLoading ? (
@@ -166,7 +164,7 @@ const MasiveRecharge = props => {
               md={6}
               xs={12}
             >
-            <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
+            
               <Grid 
                 container
                 spacing={2}
@@ -186,7 +184,6 @@ const MasiveRecharge = props => {
                     </React.Fragment>
                   </Grid>
                 </Grid>
-              </form>
             </Grid>
           </Grid>
           )}

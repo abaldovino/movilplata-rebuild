@@ -15,7 +15,8 @@ import {
   Paper,
   colors,
   IconButton,
-  Link
+  Link,
+  Box
 } from '@material-ui/core';
 
 import ClearIcon from '@material-ui/icons/Clear';
@@ -103,14 +104,18 @@ const RecargaForm = props => {
   const onSubmit = data => {
     setLoading(true)
     const posService = new PosService();
-    posService.RecargaService(data, props.userData.commerce.id, props.userData).then((response) => {
+    posService.RechargeService(data, props.userData.commerce.id, userID).then((response) => {
       if(response.description === 'success'){
         setLoading(false)
-        toast.success("Recarga Realizada. !", toastSuccess); 
+        toast.success("Recarga Realizada. !", toastSuccess);
+        userSetted(false)
+        setSearchUser(false)
       }else{
         setLoading(false)
         toast.error("Recarga fallida!", toastError); 
         console.log(response)
+        userSetted(false)
+        setSearchUser(false)
       }
     })
   }
@@ -122,18 +127,18 @@ const RecargaForm = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <form onSubmit={handleSubmit}>
-        <CardHeader title="Movil recarga" action={
-        <IconButton aria-label="settings">
-          <Link href="/admin/home" onClick={preventDefault}>
-            <ClearIcon />
-          </Link>
+      <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
+      <CardHeader title='Movil Recarga' action={
+        <IconButton aria-label="settings" onClick={() => props.handleClick()}>
+          <ClearIcon />
         </IconButton>
         }/>
         <Divider />
         <CardContent>
         {isLoading ? (
-            <CircularProgress/>
+            <Box component="span" style={{ display:'flex', justifyContent:'center', alignContent:'center' }}>
+              <CircularProgress/>
+            </Box>
           ) : (
             <Grid
             container
@@ -151,7 +156,6 @@ const RecargaForm = props => {
               md={6}
               xs={12}
             >
-            <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
               <Grid 
                 container
                 spacing={2}
@@ -192,7 +196,6 @@ const RecargaForm = props => {
                     </React.Fragment>
                   ) : ( null )}
                 </Grid>
-              </form>
             </Grid>
           </Grid>
           )}

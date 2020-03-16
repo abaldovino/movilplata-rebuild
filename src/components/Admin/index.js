@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, Typography, Grid, colors } from '@material-ui/core';
+import Page from '../../helpers/Page'
+import Header from '../../helpers/Header'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 import Label from '../../helpers/Label'
@@ -38,121 +40,49 @@ const useStyles = makeStyles(theme => ({
 
 const Index = props => {
   const { className, ...rest } = props;
-
+  const userData = typeof(props.userData) === 'string' ? JSON.parse(props.userData) : props.userData
   const classes = useStyles();
-
-  const data = {
-    income: '854,355.00',
-    expanses: '373,250.50',
-    profit: '123,532.00',
-    subscriptions: '26,000'
-  };
   
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
+    <Page
+      className={classes.root}
+      title="Panel Administrativo - Movilplata"
     >
-      <Grid
-        alignItems="center"
-        container
-        justify="space-between"
+      <Header mainTitle='Movilplata' subTitle='Panel administrativo.'/>
+      <Card
+        {...rest}
+        className={clsx(classes.root, className)}
+        style={{marginTop: 20}}
       >
         <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
+          alignItems="center"
+          container
+          justify="space-between"
         >
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
+
+        {userData.userPockets.length >= 1 ? userData.userPockets.map((item, key) => 
+          <Grid
+            className={classes.item}
+            item
+            md={2}
+            sm={6}
+            xs={12}
           >
-            Total Income
-          </Typography>
-          <div className={classes.valueContainer}>
-            <Typography variant="h3">${data.income}</Typography>
-            <Label
-              className={classes.label}
-              color={colors.green[600]}
-              variant="contained"
+            <Typography
+              component="h2"
+              gutterBottom
+              variant="overline"
             >
-              +25%
-            </Label>
-          </div>
+              {item.pocket.description}
+            </Typography>
+            <div className={classes.valueContainer}>
+              <Typography variant="h5">$ {item.balance}</Typography>
+            </div>
+          </Grid>
+        ) : '' }
         </Grid>
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
-          >
-            Total Expanses
-          </Typography>
-          <div className={classes.valueContainer}>
-            <Typography variant="h3">${data.expanses}</Typography>
-            <Label
-              className={classes.label}
-              color={colors.green[600]}
-              variant="contained"
-            >
-              +12%
-            </Label>
-          </div>
-        </Grid>
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
-          >
-            Net Profit
-          </Typography>
-          <div className={classes.valueContainer}>
-            <Typography variant="h3">{data.profit}</Typography>
-            <Label
-              className={classes.label}
-              color={colors.red[600]}
-              variant="contained"
-            >
-              -20%
-            </Label>
-          </div>
-        </Grid>
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
-          >
-            Active Subscriptions
-          </Typography>
-          <div className={classes.valueContainer}>
-            <Typography variant="h3">{data.subscriptions}</Typography>
-          </div>
-        </Grid>
-      </Grid>
-    </Card>
+      </Card>
+    </Page>
   )
 }
 

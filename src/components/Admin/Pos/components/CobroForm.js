@@ -15,7 +15,8 @@ import {
   Paper,
   colors,
   IconButton,
-  Link
+  Link,
+  Box
 } from '@material-ui/core';
 
 import ClearIcon from '@material-ui/icons/Clear';
@@ -104,23 +105,27 @@ const CobroForm = props => {
 
   const onSubmit = async data => {
     setLoading(true)
-    const token = props.sucursales.filter((sucursal) => { return sucursal.id === data.sucursal })[0].token
+    const token = props.sucursales.filter((sucursal) => { return sucursal.id === parseInt(data.sucursal) })[0].token
     setBranchToken(token)
     const posService = new PosService()
-    posService.SendPayRequest(data, props.userData.commerce.id, props.userData).then( async response => {
+    posService.SendPayRequest(data, props.userData.commerce.id, userID).then( async response => {
       if(response.description === 'Success'){
         setLoading(false)
         toast.info("Esperando Pago. !", toastSuccess);
         receiveNotificationSuccess(token)
+        userSetted(false)
+        setSearchUser(false)
       }else{
         setLoading(false)
         toast.error("Cobro fallida!", toastError); 
         console.log(response)
+        userSetted(false)
+        setSearchUser(false)
       }
     })
   }
   const receiveNotificationSuccess = (branchToken) => {
-    const eb = new Vertx("http://216.55.185.219:18081/api/notification/eventbus");
+    const eb = new Vertx("http://104.198.149.31:18081/api/notification/eventbus");
     eb.handlers = branchToken
     eb.onopen = () => {
       const token = eb.handlers;
@@ -150,25 +155,25 @@ const CobroForm = props => {
 
   }
 
-  const buttonText =  searchingUser ? <Loader type="ThreeDots" color="#25d366" height={20} width={20}/> : <i class="far fa-user"></i>
+  const buttonText =  searchingUser ? <Loader type="ThreeDots" color="#25d366" height={20} width={20}/> : <i class="far fa-user"> Buscar Usuario </i>
   const preventDefault = event => event.preventDefault();
   return (
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <form onSubmit={handleSubmit}>
-        <CardHeader title="Movil Cobro" action={
-        <IconButton aria-label="settings">
-          <Link href="/admin/home" onClick={preventDefault}>
-            <ClearIcon />
-          </Link>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CardHeader title='Movil Cobro' action={
+        <IconButton aria-label="settings" onClick={() => props.handleClick()}>
+          <ClearIcon />
         </IconButton>
         }/>
         <Divider />
         <CardContent>
         {isLoading ? (
-            <CircularProgress/>
+            <Box component="span" style={{ display:'flex', justifyContent:'center', alignContent:'center' }}>
+              <CircularProgress/>
+            </Box>
           ) : (
             <Grid
             container
@@ -186,7 +191,6 @@ const CobroForm = props => {
               md={6}
               xs={12}
             >
-            <form onSubmit={handleSubmit(onSubmit)} name='loginForm'>
               <Grid 
                 container
                 spacing={2}
@@ -234,7 +238,6 @@ const CobroForm = props => {
                     </React.Fragment>
                   ) : ( null )}
                 </Grid>
-              </form>
             </Grid>
           </Grid>
           )}
@@ -242,7 +245,7 @@ const CobroForm = props => {
         <Divider />
         <CardActions>
         {userSet ? (
-          <Button className={classes.saveButton} type="submit" variant="contained" > Cobrar </Button>
+          <Button className={classes.saveButton} variant="contained" type='submit'> Cobrar </Button>
         ) : (
           <Button className={classes.saveButton} type="button" variant="contained" onClick={() => handleBlur()} > { buttonText } </Button>
         ) }

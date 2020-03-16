@@ -8,7 +8,7 @@ export default function SlideShow() {
     <section className="landing">
       <div className="container">
         <h1>Paga de manera fácil y segura</h1>
-        <Link to='#/auth' className='btn'>Bienvenidos</Link>
+        <Link to='/login' className='btn'>Bienvenidos</Link>
       </div>
       
     </section>

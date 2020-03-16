@@ -6,7 +6,7 @@ class SucursalService {
   ListService = async (commerce, data) => {
     const encodedString = new Buffer(`${data.username}:${data.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.get(`${Config.api.dev.baseHost}/api/secure/admin/commerces/${commerce.id}/branches`,{ withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
+    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/admin/commerces/${commerce.id}/branches`,{ withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
     .then(function (response) {
       // handle success
       
@@ -26,7 +26,7 @@ class SucursalService {
   CreateSucursalService = async (data, commerce, userData) => {
     const encodedString = new Buffer(`${userData.username}:${userData.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/secure/admin/branches/commerce/${commerce}`, data, {
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/secure/admin/branches/commerce/${commerce}`, data, {
       withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }
     })
     .then(function (response) {
@@ -42,7 +42,7 @@ class SucursalService {
   EditSucursalService = async (data, userData) => {
     const encodedString = new Buffer(`${userData.username}:${userData.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.put(`${Config.api.dev.baseHost}/api/secure/admin/branches`, data, {
+    let res = await axios.put(`${Config.api.staging.baseHost}/api/secure/admin/branches`, data, {
       withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }
     })
     .then(function (response) {
@@ -58,7 +58,7 @@ class SucursalService {
   DeleteSucursalService = async (data, commerce, userData) => {
     const encodedString = new Buffer(`${userData.username}:${userData.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.delete(`${Config.api.dev.baseHost}/api/secure/admin/commerces/${commerce}/branches/${data}`, {
+    let res = await axios.delete(`${Config.api.staging.baseHost}/api/secure/admin/commerces/${commerce}/branches/${data}`, {
       withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }
     })
     
@@ -75,7 +75,7 @@ class SucursalService {
   getSucursalService = async (data, userData) => {
     const encodedString = new Buffer(`${userData.username}:${userData.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.get(`${Config.api.dev.baseHost}/api/secure/admin/commerces/${userData.commerce.id}/branches/${data}`,{
+    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/admin/commerces/${userData.commerce.id}/branches/${data}`,{
       withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }
     })
     .then(function (response) {
@@ -91,7 +91,7 @@ class SucursalService {
   addNotificationToken = async (data, userData) => {
     const encodedString = new Buffer(`${userData.username}:${userData.password}`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/secure/notification/token`, data ,{
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/secure/notification/token`, data ,{
       withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }
     })
     .then(function (response) {
