@@ -13,7 +13,7 @@ class AuthService {
     const headers = {
       'Content-Type': 'application/json'
     }
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/user/register/seller`, getFormatData(data), {
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/user/register/seller`, getFormatData(data), {
       headers: headers
     })
     .then(function (response) {

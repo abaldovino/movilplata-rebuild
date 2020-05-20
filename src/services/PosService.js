@@ -5,7 +5,7 @@ class PosService {
   SendPayRequest = async (data, commerce, userData) => {
     const encodedString = new Buffer(`:`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/secure/payment/transaction/user/${userData}/push?type=1`, cobroData(data, commerce),{ withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/secure/payment/transaction/user/${userData}/push?type=1`, cobroData(data, commerce),{ withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
     .then(function (response) {
       // handle success
       console.log('CobroService.data', response)
@@ -22,7 +22,7 @@ class PosService {
   RechargeService = async (data, commerce, userData) => {
     const encodedString = new Buffer(`:`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/secure/payment/transaction/user/${userData}/topup`, 
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/secure/payment/transaction/user/${userData}/topup`, 
     recargaData(data, commerce),{ withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
     .then(function (response) {
       // handle success
@@ -39,7 +39,7 @@ class PosService {
   SendPaymentRequest = async (data, commerce, userData) => {
     const encodedString = new Buffer(`:`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    const url = `${Config.api.dev.baseHost}/api/secure/payment/transaction/user/${userData}/push?type=2`
+    const url = `${Config.api.staging.baseHost}/api/secure/payment/transaction/user/${userData}/push?type=2`
     let res = await axios.post(url, retiroData(data, commerce),
                               { withCredentials: true, contentType: 'application/json',  
                               headers: { 'Authorization': basicAuth }}
@@ -60,7 +60,7 @@ class PosService {
   SendConfirmationPaymentRequest = async (data, commerce, refId, userData) => {
     const encodedString = new Buffer(`:`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.post(`${Config.api.dev.baseHost}/api/secure/payment/transaction/user/${userData}/withdraw`,
+    let res = await axios.post(`${Config.api.staging.baseHost}/api/secure/payment/transaction/user/${userData}/withdraw`,
                                 retiroConfirmado(data, commerce, refId), 
                                 { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
     .then(function (response) {
