@@ -22,6 +22,20 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SucursalService from '../../../services/SucursalService'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { toast } from 'react-toastify';
+import {
+  Redirect,
+  useHistory
+} from "react-router-dom";
+
+const toastError = {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+}
 
 function createData(name, city, address, email) {
   return { name, city, address, email  };
@@ -218,14 +232,18 @@ const ListSucursal = props => {
   const [ currentCommerce, setCurrentCommerce ] = React.useState(currentComerceFetch)
   const [ sucursales, setSucursales ] = React.useState([])
   const [ isLoading, setLoading ] = React.useState(true)
-
-  useEffect(() => {
+  let history = useHistory();
+  useEffect((redirect) => {
     let sucursalService = new SucursalService()
     sucursalService.ListService(currentCommerce, userData).then((response) => {
       if(response.data.code === 500) {
+        toast.error('Error. Contacta a el administrador.', toastError);
         localStorage.removeItem("tokens");
+      } else if (response.data.code === 401) {
+        toast.error('Usuario no autorizado.', toastError);
+        setLoading(false);
+        redirectToHome();
       } else {
-        console.log('componentDidMountList', response.data)
         const rows = response.data.map(( sucursal ) => {
           if(sucursal != null){
             return createData(sucursal.name, sucursal.city.name, sucursal.address, sucursal.email)
@@ -254,6 +272,10 @@ const ListSucursal = props => {
     }
     setSelected([]);
   };
+
+  const redirectToHome = () => {
+    history.push('/Admin/home');
+  }
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);

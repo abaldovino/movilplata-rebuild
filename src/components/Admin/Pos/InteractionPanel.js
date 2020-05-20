@@ -25,12 +25,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function InteractionPanel(props) {
   const userData = props.userData ? props.userData: null
-  const role = userData.userRoles.some(el => el.name === "Commerce Admin") ? 'admin' : 'user'
-  const classes = useStyles();
+  const permision = userData.role.permissions.find(el=> el === "commerce:querying") ? true : false
   let masiveButton;
   let column = 4;
 
-  if(role === 'admin'){
+  if(permision === true){
     column = 3
     masiveButton = <CardPos title='MOVIL Recarga masiva' subtitle="Recarga varios usuarios con solo un click" movilAction={() => props.handleClick('masive')}/>
   }
@@ -49,7 +48,7 @@ export default function InteractionPanel(props) {
           <Grid item xs={12} md={column}>
             <CardPos title='MOVIL Recarga' subtitle="Valor mínimo a pagar $ 1,000 COP y máximo 2'000,000 COP" movilAction={() => props.handleClick('recarga')}/>
           </Grid>
-          { role === 'admin' ? (
+          { permision ? (
             <Grid item xs={12} md={column}>
               { masiveButton }
             </Grid>

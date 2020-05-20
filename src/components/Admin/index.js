@@ -6,7 +6,6 @@ import { Card, Typography, Grid, colors } from '@material-ui/core';
 import Page from '../../helpers/Page'
 import Header from '../../helpers/Header'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-
 import Label from '../../helpers/Label'
 
 const useStyles = makeStyles(theme => ({
