@@ -55,7 +55,6 @@ const autocompleteService = { current: null };
 const CreateSucursal = props => {
   const { className, ...rest } = props;
   const classes = useStyles();
-
   const userData = props.userData ? props.userData : {}
   const { register, handleSubmit, errors, reset } = useForm()
   const [isLoading, setLoading] = useState(false);
@@ -77,14 +76,18 @@ const CreateSucursal = props => {
       }, 200),
     [],
   );
+  
+  useEffect(()=>{
+    let generalService = new GeneralService()
+    generalService.getCities(userData).then((response) => {
+      
+      setCities(response.data)
+    })
+  }, [])
 
   // De forma similar a componentDidMount y componentDidUpdate
   useEffect(() => {
     // Actualiza el título del documento usando la API del navegador
-    let generalService = new GeneralService()
-    generalService.getCities(userData).then((response) => {
-      setCities(response.data)
-    })
     let active = true;
 
     if (!autocompleteService.current && window.google) {
@@ -134,7 +137,8 @@ const CreateSucursal = props => {
       "email": data.email
      }
     let sucursalService = new SucursalService();
-    let UserData = JSON.parse(userData)
+    let UserData = userData;
+    
     sucursalService.CreateSucursalService(formData, UserData.commerce.id, UserData).then((response) => {
       if(response.description === "Success"){
           setLoading(!isLoading)

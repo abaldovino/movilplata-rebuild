@@ -29,7 +29,7 @@ class SucursalService {
       return response
     })
     .catch(function (error) {
-      return { data: { error: error, code: 500, description: 'Error. Contacta al administrador' } }
+      return { data: { error: error, code: error.response.data.statusCode, description: error.response.data.description } }
     })
     return res.data
   }

@@ -244,6 +244,7 @@ const ListSucursal = props => {
         setLoading(false);
         redirectToHome();
       } else {
+        
         const rows = response.data.map(( sucursal ) => {
           if(sucursal != null){
             return createData(sucursal.name, sucursal.city.name, sucursal.address, sucursal.email)

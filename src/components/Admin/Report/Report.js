@@ -103,7 +103,7 @@ export default function DailyReport(props) {
       setLoading(false)
     })
   }
-  const buttonText =  isLoading ? <Loader type="ThreeDots" color="#25d366" height={20} width={20}/> : <i class="far fa-user"> Buscar Usuario </i>
+  const buttonText =  isLoading ? <Loader type="ThreeDots" color="#25d366" height={20} width={20}/> : <i class="far fa-user"> Descargar </i>
   return (
     <Page
       className={classes.root}
