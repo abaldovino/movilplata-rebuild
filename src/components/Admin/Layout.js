@@ -118,6 +118,7 @@ function Layout({ children }, props) {
           {name: 'POS', url:'/admin/pos', icon: '4', disabled: false },
           {name: 'Fidelizacion', url:'/admin/', icon: '5', disabled: true },
           {name: 'Reporte Diario', url:'/admin/reports/daily', icon: '6', disabled: false },
+          {name: 'Recarga Empresarial', url:'/admin/recharge', icon: '6', disabled: false }
         ].map((hash, index) => (
           <ListItem button component={Link} to={hash.url} key={index} disabled={hash.disabled}>
             <ListItemIcon>

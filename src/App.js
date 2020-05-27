@@ -12,6 +12,7 @@ import CreateSucursal from './components/Admin/CreateSucursal/index'
 import IndexSucursal from './components/Admin/ListSucursal/index'
 import Pos from './components/Admin/Pos/Pos'
 import DailyReport from './components/Admin/Report/'
+import RechargeWallet from './components/Admin/RechargeWallet'
 import ErrorBoundary from './helpers/ErrorBoundary'
 import PrivateRoute from './helpers/PrivateRoute'
 import { createBrowserHistory } from "history";
@@ -60,6 +61,7 @@ function App() {
             <PrivateRoute path="/admin/sucursal/index" component={ () => <IndexSucursal userData={ authTokens } history={history}/> } />
             <PrivateRoute path="/admin/pos" component={ () => <Pos userData={ authTokens } /> } />
             <PrivateRoute path="/admin/reports/daily" component={ () => <DailyReport userData={ authTokens } /> } />
+            <PrivateRoute path="/admin/recharge" component={ () => <RechargeWallet userData={ authTokens } /> } />
           </Switch>
         </Router>
       </AuthContext.Provider> 

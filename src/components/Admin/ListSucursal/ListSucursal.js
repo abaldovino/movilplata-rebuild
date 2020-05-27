@@ -151,6 +151,11 @@ const useToolbarStyles = makeStyles(theme => ({
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
+  const Items = props.ItemSelected
+
+  const handleDelete = () => {
+    alert(Items);
+  }
 
   return (
     <Toolbar
@@ -171,7 +176,7 @@ const EnhancedTableToolbar = props => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
-            <DeleteIcon />
+            <DeleteIcon onClick={() => handleDelete()} />
           </IconButton>
         </Tooltip>
       ) : (
@@ -183,10 +188,6 @@ const EnhancedTableToolbar = props => {
       )}
     </Toolbar>
   );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -268,6 +269,7 @@ const ListSucursal = props => {
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = sucursales.map(n => n.name);
+      debugger
       setSelected(newSelecteds);
       return;
     }
@@ -295,6 +297,8 @@ const ListSucursal = props => {
       );
     }
 
+    debugger
+
     setSelected(newSelected);
   };
 
@@ -311,6 +315,10 @@ const ListSucursal = props => {
     setDense(event.target.checked);
   };
 
+  const handleDelete = () => {
+    alert('deleted');
+  }
+
   const isSelected = name => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, sucursales.length - page * rowsPerPage);
@@ -318,7 +326,7 @@ const ListSucursal = props => {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} ItemSelected={selected} />
         <TableContainer className={isLoading ? classes.progress : ''}>
           {isLoading ? (
             <CircularProgress/>
