@@ -6,12 +6,14 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Loader from 'react-loader-spinner';
 import clsx from 'clsx';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/styles';
 import CryptoJS from 'crypto-js';
 import {generateToken} from '../../../helpers/functions';
 import moment from 'moment';
+import InputMask from "react-input-mask";
+import {add_card, card_list} from '../../../services/PaymentezService';
 import {
   Button,
   Card,
@@ -62,7 +64,13 @@ const RechargeWallet = props => {
   const [formState, setformState] = useState('list_cards');
   const [buttonText, setButtonText] = useState('Agregar tarjeta')
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, watch, errors, control } = useForm();
+
+  /* TODO Agregar el usuario logueado */
+  /* TODO Traer las tarjetas y hacer render */
+  /* TODO Conectar con el add card */
+  /* TODO A;adir funcionalidad para eliminar la tarjeta */
+
   const classes = useStyles();
   useEffect(() => {
     const authToken = generateToken();
@@ -94,7 +102,7 @@ const RechargeWallet = props => {
     ) :
     (
       <Box component="div" m={1} style={{marginTop: '2em'}}>
-        <Grid container xs={6}>
+        <Grid container xs={12} md={6}>
           <Grid item>
             <Card
               {...rest}
@@ -113,29 +121,46 @@ const RechargeWallet = props => {
                       md={12}
                       xs={12}
                     >
-                      <TextField
-                        fullWidth
-                        helperText="Los campos son almacenados y manejados con total seguridad."
-                        label="Numero de la tarjeta"
+                      <Controller
+                        as={
+                          <InputMask mask="9999 9999 9999 9999" value={props.value} onChange={props.onChange}>
+                            {() => <TextField variant="outlined" fullWidth
+                              helperText="Los datos de la tarjeta, son encriptados. antes de enviar"
+                              label="Numero de la tarjeta"
+                              name="tdcNumber"
+                              required
+                            />}
+                          </InputMask>
+                        }
+                        control={control}
+                        mask="9999 9999 9999 9999"
                         name="tdcNumber"
-                        required
-                        variant="outlined"
-                        ref={register}
-                      />
+                        id="tdcNumber"
+                        type="text"
+                        placeholder="0000 0000 0000 0000"
+                      >
+                      </Controller>
                     </Grid>
                     <Grid
                       item
                       md={12}
                       xs={12}
                     >
-                      <TextField
-                        fullWidth
-                        helperText="Please specify the first name"
-                        label="Nombre de la tarjeta"
+                    <Controller 
+                        as={
+                          <TextField
+                            fullWidth
+                            helperText="Nombre del propietario de la tarjeta"
+                            label="Nombre de la tarjeta"
+                            name="tdcName"
+                            required
+                            variant="outlined"
+                          />
+                        }
                         name="tdcName"
-                        required
-                        variant="outlined"
-                        ref={register}
+                        id="name"
+                        rules={{required: true}}
+                        control={control}
                       />
                     </Grid>
                   </Grid>
@@ -148,29 +173,49 @@ const RechargeWallet = props => {
                       md={12}
                       xs={12}
                     >
-                    <TextField
-                      fullWidth
-                      helperText="MM/YYYY Debes cumplir este formato"
-                      label="Fecha de vencimiento"
-                      name="tdcExpiryDate"
-                      ref={register}
-                      required
-                      variant="outlined"
-                    />
+                    <Controller
+                        as={
+                          <InputMask mask="99/9999" value={props.value} onChange={props.onChange}>
+                            {() => <TextField variant="outlined" fullWidth
+                              helperText="Fecha de vencimiento de la tarjeta."
+                              label="MM/YYYY"
+                              required
+                            />}
+                          </InputMask>
+                        }
+                        rules={{required: true}}
+                        control={control}
+                        mask="99/9999"
+                        id="expirydate"
+                        type="text"
+                        name="tdcExpiryDate"
+                      />
                     </Grid>
                     <Grid
                       item
                       md={12}
                       xs={12}
                     >
-                      <TextField
-                        fullWidth
-                        helperText="Codigo de seguridad, ubicado en la parte posterior de la tarjeta"
+                      <Controller 
+                        as={
+                          <TextField
+                            fullWidth
+                            helperText="Codigo de seguridad, ubicado en la parte posterior de la tarjeta"
+                            label="Codigo de seguridad (CVC)"
+                            name="tdcCVC"
+                            required
+                            variant="outlined"
+                          />
+                        }
                         label="Codigo de seguridad (CVC)"
-                        name="tdcCVC"
-                        ref={register}
-                        required
-                        variant="outlined"
+                        name="tdcCvc"
+                        maxLength='3'
+                        id="name"
+                        rules={{required: true, minLength: {
+                          value:3,
+                          message:'Tres digitos maximo',
+                        }}}
+                        control={control}
                       />
                     </Grid>
                   </Grid>

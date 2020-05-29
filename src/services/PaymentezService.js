@@ -1,0 +1,42 @@
+import axios from 'axios';
+
+export const add_card = async (user, paymentData, year, month, headers) => {
+    const result = await axios.post(`https://ccapi-stg.paymentez.com/v2/card/add`, 
+        {
+            "user": {
+                "id": user,
+                "email": user.email
+            },
+            "card": {
+                "number": paymentData.tdcNumber,
+                "holder_name": paymentData.tdcName,
+                "expiry_month": month,
+                "expiry_year": year,
+                "cvc": paymentData.cvc,
+            }
+        }, {headers})
+        .then(response => {
+            if (response.status === 200) {
+                return {cards: response.data.card, status: 200}
+            }else{
+                return {cards: response.token, status: 500}
+            }
+        })
+        .catch(err => {
+            console.log('Error ->', 'error')
+        })
+}
+
+export const card_list = async (user, headers) => {
+    const card_list = await axios.get(`https://ccapi-stg.paymentez.com/v2/card/list?uid=${user}`, {headers})
+        .then(response => {
+            if (response.status === 200) {
+                return {cards: response.data.cards, status: 200}
+            }else{
+                return {cards: response.data, status: 500}
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
