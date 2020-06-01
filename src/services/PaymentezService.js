@@ -3,7 +3,6 @@ import axios from 'axios';
 export const add_card = async (user, paymentData, year, month, headers) => {
     const userEmail = user.email
     const userId = user.id
-
     const result = await axios.post(`https://ccapi-stg.paymentez.com/v2/card/add`, 
         {
             "user": {
@@ -11,7 +10,7 @@ export const add_card = async (user, paymentData, year, month, headers) => {
                 "email": userEmail
             },
             "card": {
-                "number": paymentData.tdcNumber,
+                "number": paymentData.tdcNumber.replace(/ /g,''),
                 "holder_name": paymentData.tdcName,
                 "expiry_month": month,
                 "expiry_year": year,
@@ -26,8 +25,10 @@ export const add_card = async (user, paymentData, year, month, headers) => {
             }
         })
         .catch(err => {
-            console.log('Error ->', 'error')
+            return {cards: [], status: err.response.status, err: err.response.data.error.description}
         })
+        
+        return result
 }
 
 export const card_list = async (user, headers) => {

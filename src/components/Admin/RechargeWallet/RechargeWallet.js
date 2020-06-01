@@ -57,28 +57,46 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
+const toastSuccess = {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+}
 
+const toastError = {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+}
 const RechargeWallet = props => {
   const { className, ...rest } = props;
   const [paymentezToken, setpaymentezToken] = useState();
   const [formState, setformState] = useState('list_cards');
   const [buttonText, setButtonText] = useState('Agregar tarjeta')
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const { register, handleSubmit, watch, errors, control } = useForm();
   const userData = props.userData ? props.userData : {}
   const [cards, setCards] = useState([]);
   /* TODO Conectar con el add card */
   /* TODO A;adir funcionalidad para eliminar la tarjeta */
   const classes = useStyles();
-  useEffect(() => {
-    const authToken = generateToken();
+  const loadCards = async () => {
+    const authToken = generateToken(false);
     setpaymentezToken(authToken)
     const headers = {
       'Content-Type': 'application/json',
       'Auth-Token': authToken,
-    } 
-    const listCards = card_list(userData.id, headers);
-    setCards(listCards);
+    }
+    const response = await card_list(userData.id, headers);
+    setCards(response.cards);
+  }
+  useEffect(() => {
+    loadCards();
   }, [])
   const changeState = () => {
     if (formState === 'list_cards') {
@@ -94,13 +112,18 @@ const RechargeWallet = props => {
     const month = parseInt(date[0])
     const year = parseInt(date[1])
     const temporal_user = userData;
-    const authToken = generateToken();
+    const authToken = generateToken(true);
     setpaymentezToken(authToken)
     const headers = {
       'Content-Type': 'application/json',
       'Auth-Token': authToken,
     } 
-    const payment_token = await add_card(temporal_user, data, year, month, headers)
+    const response = await add_card(temporal_user, data, year, month, headers);
+    if(response.status === 200){
+      console.log(response);
+    }else{
+      toast.error(response.err, toastError); 
+    }
   };
   function TdcCard (props) {
     return(
@@ -113,11 +136,12 @@ const RechargeWallet = props => {
       </Grid>
     )
   }
-  let listBody = cards && cards.length > 0 ? 
-    cards.map((item, key) => {
-      return <TdcCard key={key} number={item.number}/>
-    })
-    : (
+  
+  let listBody = cards && cards.length > 0 ? (
+      cards.map((item, key) => {
+        return <TdcCard key={key} number={item.number}/>
+      })
+    ):(
       <Grid item xs={12} md={6}>
         <Paper className={classes.paper}>
           <Typography variant="h6" component="h6">
