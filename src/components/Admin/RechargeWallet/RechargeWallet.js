@@ -65,16 +65,20 @@ const RechargeWallet = props => {
   const [buttonText, setButtonText] = useState('Agregar tarjeta')
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const { register, handleSubmit, watch, errors, control } = useForm();
-
-  /* TODO Agregar el usuario logueado */
-  /* TODO Traer las tarjetas y hacer render */
+  const userData = props.userData ? props.userData : {}
+  const [cards, setCards] = useState([]);
   /* TODO Conectar con el add card */
   /* TODO A;adir funcionalidad para eliminar la tarjeta */
-
   const classes = useStyles();
   useEffect(() => {
     const authToken = generateToken();
     setpaymentezToken(authToken)
+    const headers = {
+      'Content-Type': 'application/json',
+      'Auth-Token': authToken,
+    } 
+    const listCards = card_list(userData.id, headers);
+    setCards(listCards);
   }, [])
   const changeState = () => {
     if (formState === 'list_cards') {
@@ -85,18 +89,48 @@ const RechargeWallet = props => {
       setButtonText('Agregar Tarjeta')
     }
   }
-  const onSubmit = data => console.log(data);
+  const onSubmit = async data => {
+    const date = data.tdcExpiryDate.split('/');
+    const month = parseInt(date[0])
+    const year = parseInt(date[1])
+    const temporal_user = userData;
+    const authToken = generateToken();
+    setpaymentezToken(authToken)
+    const headers = {
+      'Content-Type': 'application/json',
+      'Auth-Token': authToken,
+    } 
+    const payment_token = await add_card(temporal_user, data, year, month, headers)
+  };
+  function TdcCard (props) {
+    return(
+      <Grid item xs={12} md={6}>
+        <Paper className={classes.paper}>
+          <Typography variant="h6" component="h6">
+            {`**** **** **** ${props.number}`}
+          </Typography>
+        </Paper>
+      </Grid>
+    )
+  }
+  let listBody = cards && cards.length > 0 ? 
+    cards.map((item, key) => {
+      return <TdcCard key={key} number={item.number}/>
+    })
+    : (
+      <Grid item xs={12} md={6}>
+        <Paper className={classes.paper}>
+          <Typography variant="h6" component="h6">
+            Actualmente no tienes tarjetas agregadas.
+          </Typography>
+        </Paper>
+      </Grid>
+    )
   const bodyContent = formState === 'list_cards' ? 
     ( 
       <Box component="div" m={1} style={{marginTop: '2em'}}>
         <Grid container xs={12} direction='row' spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6" component="h6">
-                Actualmente no tienes tarjetas agregadas.
-              </Typography>
-            </Paper>
-          </Grid>
+          {listBody}
         </Grid>
       </Box>
     ) :
