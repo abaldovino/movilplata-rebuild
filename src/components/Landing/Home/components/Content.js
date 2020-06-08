@@ -21,7 +21,7 @@ export default function Content() {
           <p className="detail mt-3 mb-3">
           Fortaleciendo el tejido empresarial del Caribe y toda Colombia por medio
            de la implementación de tecnología para fomentar la inclusión y
-           educación financiera.
+           educación financiera...
           </p>
           <div className="mision-container">
             <div>
