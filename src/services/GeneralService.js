@@ -16,6 +16,12 @@ class GeneralService {
     let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/users?username=${data}`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
     return res.data
   }
+  getbanks = async (data) => {
+    const encodedString = new Buffer(`:`).toString('base64');
+    const basicAuth = 'Basic ' + encodedString;
+    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/payment/banks`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})    
+    return res.data
+  }
 }
 
 export default GeneralService;

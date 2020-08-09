@@ -6,7 +6,6 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { makeStyles } from '@material-ui/styles';
 import {
   Button,
-  CardHeader,
   Grid,
   ListItemText,
   Avatar,
@@ -16,9 +15,10 @@ import {
   List,
   ListItem
 } from '@material-ui/core';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import InboxIcon from '@material-ui/icons/Inbox';
+
 import RechargeWallet from '../RechargeWallet/index';
+import PsePayment from './components/psePayment';
+
 const useStyles = makeStyles(theme => ({
   root: {},
   saveButton: {
@@ -111,7 +111,7 @@ const Recharge = props => {
   ) : panel === 'tdc' ? (
     <RechargeWallet />
   ) : (
-    <p>Prueba Mundo</p>
+    <PsePayment />
   );
 
   return (
