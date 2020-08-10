@@ -296,19 +296,13 @@ const RechargeWallet = props => {
     )
 
   return (
-    <Page
-      className={classes.root}
-      title="Recarga empresarial - Movilplata"
-    >
+    <React.Fragment>
       <Grid
         alignItems="flex-end"
         container
         justify="space-between"
         spacing={3}
       >
-        <Grid item>
-          <Header mainTitle='Movilplata' subTitle='Recarga tu cuenta principal'/>
-        </Grid>
         <Grid item>
           <Button
             color="primary"
@@ -320,7 +314,7 @@ const RechargeWallet = props => {
         </Grid>
       </Grid>
       {bodyContent}
-    </Page>
+    </React.Fragment>
   )
 }
 

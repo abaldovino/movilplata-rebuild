@@ -13,6 +13,8 @@ import IndexSucursal from './components/Admin/ListSucursal/index'
 import Pos from './components/Admin/Pos/Pos'
 import DailyReport from './components/Admin/Report/'
 import RechargeWallet from './components/Admin/RechargeWallet'
+import Recharge from './components/Admin/Recharge/Index';
+import RechargeReturn from './components/Admin/Recharge/components/pseReturnUrl';
 import ErrorBoundary from './helpers/ErrorBoundary'
 import PrivateRoute from './helpers/PrivateRoute'
 import { createBrowserHistory } from "history";
@@ -61,7 +63,8 @@ function App() {
             <PrivateRoute path="/admin/sucursal/index" component={ () => <IndexSucursal userData={ authTokens } history={history}/> } />
             <PrivateRoute path="/admin/pos" component={ () => <Pos userData={ authTokens } /> } />
             <PrivateRoute path="/admin/reports/daily" component={ () => <DailyReport userData={ authTokens } /> } />
-            <PrivateRoute path="/admin/recharge" component={ () => <RechargeWallet userData={ authTokens } /> } />
+            <PrivateRoute path="/admin/recharge" component={ () => <Recharge userData={ authTokens } /> } />
+            <PrivateRoute exact path="/admin/callback/pse/result" component={() => <RechargeReturn userData={ authTokens } />} />
           </Switch>
         </Router>
       </AuthContext.Provider> 
