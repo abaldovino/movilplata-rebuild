@@ -297,8 +297,6 @@ const ListSucursal = props => {
       );
     }
 
-    debugger
-
     setSelected(newSelected);
   };
 

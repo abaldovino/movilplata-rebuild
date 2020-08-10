@@ -20,7 +20,9 @@ import clsx from 'clsx';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/styles';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import GeneralService from '../../../../services/GeneralService';
+import PseService from '../../../../services/PseService';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -66,11 +68,18 @@ const toastError = {
   pauseOnHover: true,
   draggable: true
 }
+
+const DocumentList = [{name: 'Selecciona tu tipo de identificacion', id: ''}, { name: 'Cedula de identidad', id: 'CC' }, { name: 'NIT', id: 'NIT' }];
+
 const PsePayment = (props) => {
+  const userData = localStorage.getItem("tokens") != null ? JSON.parse(localStorage.getItem("tokens")) : null; 
+
   const { className, ...rest } = props;
   const { register, handleSubmit, watch, errors, control } = useForm();
   const [banks, setBanks] = useState([])
   const [bankSelected, setBankSelected] = useState('')
+  const [dniType, setDniType] = useState('')
+  const [isLoading, setLoading] = useState(false);
   const classes = useStyles();
   useEffect(() => {
     let generalService = new GeneralService();
@@ -80,11 +89,20 @@ const PsePayment = (props) => {
     })
   }, [])
   const onSubmit = async data => {
-    console.log(data);
+    setLoading(true);
+    let pseService = new PseService();
+    pseService.PayPSERequest(userData, data).then((response) => {
+      console.log(response);
+    })
+    window.open('https://www.google.com', '_blank');
   }
   const handleChange = event => {
     console.log(event.target.name);
     setBankSelected(event.target.value);
+  };
+  const handleChangeDni = event => {
+    console.log(event.target.value);
+    setDniType(event.target.value);
   };
   return (
     <React.Fragment>
@@ -102,55 +120,143 @@ const PsePayment = (props) => {
               {...rest}
               className={clsx(classes.root, className)}
             >
-               <form onSubmit={handleSubmit(onSubmit)}>
+              {isLoading ? (
+                <CircularProgress/>
+              ) : (
+                <form onSubmit={handleSubmit(onSubmit)}>
                 <CardHeader title="Completa los campos, para continuar con a operación." />
                   <Divider />
                   <CardContent>
                     <Grid container spacing={4}
                     >
                       <Grid item md={12} xs={12}>
-                        <Controller 
+                        <Controller
                           as={
                             <TextField
                               fullWidth
-                              helperText="Nombre del propietario de la tarjeta"
-                              label="Nombre de la tarjeta"
-                              name="tdcName"
+                              helperText="Nombre del titular"
+                              label="Nombre Completo"
+                              name="name"
                               required
                               variant="outlined"
                             />
                           }
-                          name="tdcName"
+                          name="name"
                           id="name"
                           rules={{required: true}}
                           control={control}
                         />
                       </Grid>
                       <Grid item md={12} xs={12}>
-                      <TextField
-                        fullWidth
-                        label={bankSelected !== '' ? 'Selecciona tu banco' : bankSelected}
-                        name="state"
-                        onChange={handleChange}
-                        select
-                        // eslint-disable-next-line react/jsx-sort-props
-                        SelectProps={{ native: true }}
-                        value={bankSelected}
-                        variant="outlined"
-                      >
-                        {banks.map(state => (
-                          <option
-                            key={state}
-                            value={state.code}
-                          >
-                            {state.name}
-                          </option>
-                        ))}
-                      </TextField>
+                        <Controller
+                            as={
+                              <TextField
+                                fullWidth
+                                label={dniType !== '' ? 'Selecciona tu tipo de identificacion' : dniType}
+                                name="dnitype"
+                                onChange={handleChangeDni}
+                                select
+                                // eslint-disable-next-line react/jsx-sort-props
+                                SelectProps={{ native: true }}
+                                value={dniType}
+                                variant="outlined"
+                              >
+                                {DocumentList.map(state => (
+                                  <option
+                                    key={state}
+                                    value={state.id}
+                                  >
+                                    {state.name}
+                                  </option>
+                                ))}
+                              </TextField>
+                            }
+                            name="dnitype"
+                            id="dnitype"
+                            rules={{required: true}}
+                            control={control}
+                          />
+                      </Grid>
+                      <Grid item md={12} xs={12}>
+                        <Controller
+                          as={
+                            <TextField
+                              fullWidth
+                              helperText="Numero de identificacion"
+                              label="Numero de identificacion"
+                              name="dni"
+                              required
+                              variant="outlined"
+                            />
+                          }
+                          name="dni"
+                          id="dni"
+                          rules={{required: true}}
+                          control={control}
+                        />
+                      </Grid>
+                      <Grid item md={12} xs={12}>
+                        <Controller
+                          as={
+                            <TextField
+                              fullWidth
+                              label={bankSelected !== '' ? 'Selecciona tu banco' : bankSelected}
+                              name="bank"
+                              onChange={handleChange}
+                              select
+                              // eslint-disable-next-line react/jsx-sort-props
+                              SelectProps={{ native: true }}
+                              value={bankSelected}
+                              variant="outlined"
+                            >
+                              {banks.map(state => (
+                                <option
+                                  key={state}
+                                  value={state.code}
+                                >
+                                  {state.name}
+                                </option>
+                              ))}
+                            </TextField>
+                          }
+                          name="bank"
+                          id="bank"
+                          rules={{required: true}}
+                          control={control}
+                        />
+                      </Grid>
+                      <Grid item md={12} xs={12}>
+                        <Controller
+                          as={
+                            <TextField
+                              fullWidth
+                              helperText="Monto a recargar"
+                              label="Ingresa el monto a recargar"
+                              name="ammount"
+                              required
+                              variant="outlined"
+                            />
+                          }
+                          name="ammount"
+                          id="dni"
+                          rules={{required: true}}
+                          control={control}
+                        />
                       </Grid>
                     </Grid>
                   </CardContent>
+                  <Divider />
+                  <CardActions>
+                    <Button
+                      className={classes.saveButton}
+                      type="submit"
+                      variant="contained"
+                    >
+                      Iniciar Transaccion.
+                    </Button>
+                  </CardActions>
                 </form>
+              )}
             </Card>
           </Grid>
         </Grid>
