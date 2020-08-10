@@ -42,7 +42,7 @@ const PSEData = async (data, transaction) => {
         extra_params: {
           bank_code: transaction.bank,
           response_url:
-            'http://localhost:3000/admin/callback/pse/result',
+            'https://104.198.149.31/admin/callback/pse/result',
           user: {
             name: "Juan Otero",
             fiscal_number: 79795046,
