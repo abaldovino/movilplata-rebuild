@@ -32,7 +32,7 @@ const PSEData = async (data, transaction) => {
       fee: transaction.ammount,
       referenceId: 'tr-pse',
       detail: 'Transaccion a traves de PSE',
-      pocketIds: [8],
+      pocketIds: [1],
       commerceId:1,
       commerceBranchId:1,
       commerceName: 'test',
