@@ -92,9 +92,10 @@ const PsePayment = (props) => {
     setLoading(true);
     let pseService = new PseService();
     pseService.PayPSERequest(userData, data).then((response) => {
-      console.log(response);
+      debugger
+      localStorage.setItem('TransactionID', response.data.transaction.id);
+      window.open(response.data.transaction.bank_url, '_blank');
     })
-    window.open('https://www.google.com', '_blank');
   }
   const handleChange = event => {
     console.log(event.target.name);
