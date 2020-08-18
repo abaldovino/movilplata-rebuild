@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -7,6 +7,8 @@ import Page from '../../helpers/Page'
 import Header from '../../helpers/Header'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Label from '../../helpers/Label'
+import LoginService from '../../services/AuthService';
+import { useAuth } from "../../contexts/Auth";
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -39,9 +41,17 @@ const useStyles = makeStyles(theme => ({
 
 const Index = props => {
   const { className, ...rest } = props;
-  const userData = typeof(props.userData) === 'string' ? JSON.parse(props.userData) : props.userData
+  const [userData, setUserData] = useState(typeof(props.userData) === 'string' ? JSON.parse(props.userData) : props.userData)
+  const { setAuthTokens, authTokens } = useAuth();
   const classes = useStyles();
-  
+  useEffect(() => {
+    let loginService = new LoginService();
+    loginService.getUserData(userData).then((response, data) => {
+      if (response.data.description === 'Success'){
+        setUserData(response.data.data);
+      }
+    })
+  }, [ ])
   return (
     <Page
       className={classes.root}

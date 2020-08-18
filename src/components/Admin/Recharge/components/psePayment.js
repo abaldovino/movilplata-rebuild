@@ -72,7 +72,7 @@ const toastError = {
 const DocumentList = [{name: 'Selecciona tu tipo de identificacion', id: ''}, { name: 'Cedula de identidad', id: 'CC' }, { name: 'NIT', id: 'NIT' }];
 
 const PsePayment = (props) => {
-  const userData = localStorage.getItem("tokens") != null ? JSON.parse(localStorage.getItem("tokens")) : null; 
+  const userData = localStorage.getItem("tokens") != null ? JSON.parse(localStorage.getItem("tokens")) : null;
 
   const { className, ...rest } = props;
   const { register, handleSubmit, watch, errors, control } = useForm();
@@ -80,11 +80,11 @@ const PsePayment = (props) => {
   const [bankSelected, setBankSelected] = useState('')
   const [dniType, setDniType] = useState('')
   const [isLoading, setLoading] = useState(false);
+  const [psePaymentRequested, setPaymentRequested] = useState(false);
   const classes = useStyles();
   useEffect(() => {
     let generalService = new GeneralService();
-    generalService.getbanks(props.userData).then((response) => {
-      console.log(response.data.banks);
+    generalService.getbanks(userData).then((response) => {
       setBanks(response.data.banks);
     })
   }, [])
@@ -92,9 +92,9 @@ const PsePayment = (props) => {
     setLoading(true);
     let pseService = new PseService();
     pseService.PayPSERequest(userData, data).then((response) => {
-      debugger
       localStorage.setItem('TransactionID', response.data.transaction.id);
       window.open(response.data.transaction.bank_url, '_blank');
+      setPaymentRequested(true);
     })
   }
   const handleChange = event => {
@@ -122,7 +122,11 @@ const PsePayment = (props) => {
               className={clsx(classes.root, className)}
             >
               {isLoading ? (
-                <CircularProgress/>
+                psePaymentRequested ? (
+                  <h3>Tu Transaccion a iniciado, ya puedes cerrar esta ventana</h3>
+                ) : (
+                  <CircularProgress/>
+                )
               ) : (
                 <form onSubmit={handleSubmit(onSubmit)}>
                 <CardHeader title="Completa los campos, para continuar con a operación." />

@@ -22,6 +22,7 @@ import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import PseService from '../../../../services/PseService';
+import {useAuth} from '../../../../contexts/Auth';
 import {
   useParams
 } from "react-router-dom";
@@ -83,9 +84,19 @@ const PseReturnUrl = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [transaction, setTransaction] = useState({})
   const classes = useStyles();
+  const { setAuthTokens, authTokens } = useAuth();
+  let params = useParams();
+
   useEffect(() => {
+    let transaction;
     let pseService = new PseService();
-    pseService.CheckPSEPayRequest(localStorage.getItem('TransactionID')).then((response) => {
+    debugger
+    if(params.transaction_id !== 'web'){
+      transaction = params.transaction_id
+    }else{
+      transaction = localStorage.getItem('TransactionID')
+    }
+    pseService.CheckPSEPayRequest(transaction, userData).then((response) => {
       setTransaction({
         fee: response.data.fee,
         detail: response.data.detail,
@@ -135,7 +146,7 @@ const PseReturnUrl = (props) => {
                 ) : (
                   <Grid container spacing={4}
                 >
-                  <h3>{`Tu transaccion por un monto de ${transaction.fee} a tu bolsillo Movilpesos, con numero de identificacion #${transaction.reference_id} fue ${transaction.status}`}</h3>
+                  <h3>{`Tu transaccion por un monto de ${transaction.fee}$ COP a tu bolsillo Movilpesos, con numero de identificacion #${transaction.reference_id} fue ${transaction.status}`}</h3>
                 </Grid>
                 )}
               </CardContent>

@@ -19,6 +19,7 @@ import ErrorBoundary from './helpers/ErrorBoundary'
 import PrivateRoute from './helpers/PrivateRoute'
 import { createBrowserHistory } from "history";
 import { ToastContainer} from 'react-toastify';
+import Layout from './components/Admin/Layout';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -64,7 +65,9 @@ function App() {
             <PrivateRoute path="/admin/pos" component={ () => <Pos userData={ authTokens } /> } />
             <PrivateRoute path="/admin/reports/daily" component={ () => <DailyReport userData={ authTokens } /> } />
             <PrivateRoute path="/admin/recharge" component={ () => <Recharge userData={ authTokens } /> } />
-            <PrivateRoute exact path="/admin/callback/pse/result" component={() => <RechargeReturn userData={ authTokens } />} />
+            <Route exact path="/admin/callback/pse/result/:transaction_id" component={() => <Layout>
+              <RechargeReturn userData={ authTokens } match/>
+            </Layout>} />
           </Switch>
         </Router>
       </AuthContext.Provider> 

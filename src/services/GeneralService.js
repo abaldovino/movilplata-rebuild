@@ -4,22 +4,22 @@ import Config from './../config/index'
 class GeneralService {
   getCities = async (data) => {
     const encodedString = new Buffer(`${data.username}:${data.password}`).toString('base64');
-    const basicAuth = 'Basic ' + encodedString;
+    const header = `Bearer ${localStorage.getItem('token')}`;
     let res = await axios.get(`${Config.api.staging.baseHost}/api/cities/country/472`, {
-      withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }
+      withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': header }
     })
     return res.data
   }
   getUserById = async (data) => {
     const encodedString = new Buffer(`:`).toString('base64');
-    const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/users?username=${data}`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})
+    const header = `Bearer ${localStorage.getItem('token')}`;
+    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/users?username=${data}`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': header }})
     return res.data
   }
   getbanks = async (data) => {
-    const encodedString = new Buffer(`:`).toString('base64');
-    const basicAuth = 'Basic ' + encodedString;
-    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/payment/banks`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }})    
+    const encodedString = new Buffer(`${data.username}:${data.password}`).toString('base64');
+    const header = `Bearer ${localStorage.getItem('token')}`;
+    let res = await axios.get(`${Config.api.staging.baseHost}/api/secure/payment/banks`, { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': header }})    
     return res.data
   }
 }

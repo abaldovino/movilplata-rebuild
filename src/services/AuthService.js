@@ -1,6 +1,7 @@
 
 import axios from 'axios'
 import Config from './../config/index'
+import qs from 'query-string'
 
 class AuthService {
   async login(data){
@@ -24,6 +25,56 @@ class AuthService {
       return { data: { error: error, code: 500, description: 'Error. Contacta al administrador' } }
     })
     return res.data
+  }
+
+  async getToken(data) {
+    const {username, password} = data;
+    console.log('body', data)
+    console.log('URL:', `${Config.apiv2.url}${Config.apiv2.login_url}`);
+
+    const requestBody = {
+      username,
+      password,
+      grant_type: 'password',
+      scope: 'openid offline_access',
+      client_id: Config.apiv2.client_id,
+      client_secret: Config.apiv2.client_secret_staging,
+    }
+
+    const headerConfig = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+
+    var status = 200;
+
+    const loginResponse = await axios.post(`${Config.apiv2.url}${Config.apiv2.login_url}`, qs.stringify(requestBody), headerConfig)
+    .then(function (response) {
+      return response.data.access_token;
+    })
+    .catch(function (error) {
+      console.log('error ', error);
+      status = 401;
+      return error;
+    });
+
+    return {data: status === 200 ? loginResponse : loginResponse.message, code: status }
+  }
+
+  async getUserData (data){
+    const {username} = data;
+    const header = `Bearer ${localStorage.getItem('token')}`;
+    const userData = await axios.get(`${Config.apiv2.url_secured_staging}${Config.apiv2.get_user}username=${username}`, { headers: { Authorization: header } })
+    .then(function (response) {
+      return response;
+    })
+    .catch(function (error) {
+      console.log('error ', error);
+      return {data: error, status: 500}
+    });
+
+    return userData
   }
 }
 

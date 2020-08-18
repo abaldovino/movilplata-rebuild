@@ -35,23 +35,31 @@ const FormLogin = (props) => {
   const onSubmit = data => {
     setLoading(true)
     let loginService = new LoginService();
-    loginService.login(data).then((response, data) => {
-      console.log('Authentication', response.description)
-      if (response.description === 'Success' && response.data.commerce != null) {
-        console.log('response:', response.data)
-        setAuthTokens(response.data);
+    loginService.getToken(data).then((response) => {
+      localStorage.setItem("token", response.data);
+      if(response.code === 200) {
+        loginService.getUserData(data).then((response, data) => {
+          if (response.data.description === 'Success' && response.data.data.commerce != null) {
+            console.log('response:', response.data.data)
+            setAuthTokens(response.data.data);
+            props.handleLoading(false)
+            toast.success("Logueado Correctamente !");
+            setLoading(false)
+          } else {
+            if( response.data.data.commerce === null ){
+              props.handleLoading(false)
+              toast.error("No tienes un comercio asociado.", toastError);  
+            }else{
+              props.handleLoading(false)
+              toast.error(response.description, toastError);  
+            }
+            setLoading(false)
+          }
+        })
+      }else{
+        setLoading(false)
         props.handleLoading(false)
-        toast.success("Logueado Correctamente !");
-        setLoading(false)
-      } else {
-        if( response.data.commerce === null ){
-          props.handleLoading(false)
-          toast.error("No tienes un comercio asociado.", toastError);  
-        }else{
-          props.handleLoading(false)
-          toast.error(response.description, toastError);  
-        }
-        setLoading(false)
+        toast.error('Usuario no autorizado', toastError);  
       }
     })
   }
