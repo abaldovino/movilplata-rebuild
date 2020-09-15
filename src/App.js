@@ -65,7 +65,10 @@ function App() {
             <PrivateRoute path="/admin/pos" component={ () => <Pos userData={ authTokens } /> } />
             <PrivateRoute path="/admin/reports/daily" component={ () => <DailyReport userData={ authTokens } /> } />
             <PrivateRoute path="/admin/recharge" component={ () => <Recharge userData={ authTokens } /> } />
-            <Route exact path="/admin/callback/pse/result/:transaction_id" component={() => <Layout>
+            <Route exact path="/admin/callback/pse/result/:transaction_id/:identifier" component={() => <Layout>
+              <RechargeReturn userData={ authTokens } match/>
+            </Layout>} />
+            <Route exact path="/admin/callback/pse/result/:transaction_id/:identifier/:result" component={() => <Layout>
               <RechargeReturn userData={ authTokens } match/>
             </Layout>} />
           </Switch>

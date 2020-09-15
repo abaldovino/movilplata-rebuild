@@ -269,7 +269,6 @@ const ListSucursal = props => {
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = sucursales.map(n => n.name);
-      debugger
       setSelected(newSelecteds);
       return;
     }

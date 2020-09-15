@@ -40,7 +40,7 @@ const PSEData = async (data, transaction) => {
         extra_params: {
           bank_code: transaction.bank,
           response_url:
-            'https://staging-movilplata.homeip.net/admin/callback/pse/result/web',
+            'https://staging-movilplata.homeip.net/admin/callback/pse/result/web/0',
           user: {
             name: transaction.name,
             fiscal_number: parseInt(transaction.dni),

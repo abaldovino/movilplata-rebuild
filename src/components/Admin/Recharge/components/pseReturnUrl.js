@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useHistory } from 'react';
 import Page from '../../../../helpers/Page';
 import Header from '../../../../helpers/Header';
 import {
@@ -86,11 +86,11 @@ const PseReturnUrl = (props) => {
   const classes = useStyles();
   const { setAuthTokens, authTokens } = useAuth();
   let params = useParams();
-
+  let history = useHistory();
+  
   useEffect(() => {
     let transaction;
     let pseService = new PseService();
-    debugger
     if(params.transaction_id !== 'web'){
       transaction = params.transaction_id
     }else{
@@ -105,6 +105,9 @@ const PseReturnUrl = (props) => {
         status: response.data.transactionStatus.description,
       })
       setLoading(false);
+      if(params.transaction_id !== 'web' && params.identifier === 1){
+        history.push(`/admin/callback/pse/result/web/0/${transaction.status}`)
+      }
     })
   }, [])
 
