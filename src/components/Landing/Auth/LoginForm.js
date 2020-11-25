@@ -26,24 +26,32 @@ const toastError = {
   draggable: true
 }
 const FormLogin = (props) => {
-  const userData = localStorage.getItem("tokens");
+  const authTokenStorage = localStorage.getItem("tokens");
   const [ isLoading, setLoading ] = useState( false );
-  const [ isLoggedIn, setLoggedIn ] = useState( userData != null ? true : false );
+  const [ isLoggedIn, setLoggedIn ] = useState( authTokenStorage != null ? true : false );
   const { register, handleSubmit, watch, errors } = useForm()
   const { setAuthTokens, authTokens } = useAuth();
+  const { setUserData, userData } = useAuth();
 
   const onSubmit = data => {
+    const formData = data;
     setLoading(true)
     let loginService = new LoginService();
-    loginService.login(data).then((response, data) => {
-      console.log('Authentication', response.description)
-      if (response.description === 'Success' && response.data.commerce != null) {
-        console.log('response:', response.data)
-        setAuthTokens(response.data);
-        props.handleLoading(false)
-        toast.success("Logueado Correctamente !");
-        setLoading(false)
+    loginService.getAccessToken(data).then((response, data) => {
+      if (response.status === 200) {
+        loginService.getUserData(formData, response.data).then((response, data) => {
+          if (response.status === 200) {
+            setUserData(response.data.data)
+            props.handleLoading(false)
+            toast.success("Logueado Correctamente !");
+            setLoading(false)
+            setAuthTokens(response.data);
+          } else {
+            toast.error("Error", toastError);  
+          }
+        })
       } else {
+        debugger
         if( response.data.commerce === null ){
           props.handleLoading(false)
           toast.error("No tienes un comercio asociado.", toastError);  

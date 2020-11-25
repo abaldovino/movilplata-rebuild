@@ -1,6 +1,7 @@
 
-import axios from 'axios'
-import Config from './../config/index'
+import axios from 'axios';
+import Config from './../config/index';
+import qs from 'query-string';
 
 class AuthService {
   async login(data){
@@ -24,6 +25,52 @@ class AuthService {
       return { data: { error: error, code: 500, description: 'Error. Contacta al administrador' } }
     })
     return res.data
+  }
+
+  async getUserData(data, headers){
+    debugger
+    const {username} = data;
+    const header = `Bearer ${headers.access_token}`;
+    const userData = await axios.get(`${Config.url_secured_staging}${Config.get_user}username=${username}`, { headers: { Authorization: header } })
+    .then(function (response) {
+      debugger
+      return response;
+    })
+    .catch(function (error) {
+      console.log('error ', error);
+      return error.response
+    });
+
+    return userData;
+  }
+
+  async getAccessToken(data){
+    const {username, password} = data;
+    const requestBody = {
+      username,
+      password,
+      grant_type: 'password',
+      scope: 'openid offline_access',
+      client_id: Config.client_id,
+      client_secret: Config.client_secret_staging,
+    }
+    const headerConfig = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+    var status = 200;
+
+    const loginResponse = await axios.post(`${Config.url}${Config.login_url}`, qs.stringify(requestBody), headerConfig)
+    .then(function (response) {
+      debugger
+      return response;
+    })
+    .catch(function (error) {
+      debugger
+      return error.response
+    });
+    return loginResponse;
   }
 }
 
