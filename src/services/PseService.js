@@ -6,7 +6,7 @@ class PseService {
     PayPSERequest = async (data, transactionData) => {
         const header = `Bearer ${localStorage.getItem('token')}`;
         const payload = await PSEData(data, transactionData);
-        let res = await axios.post(`${Config.api.staging.baseHost}/api/secure/payment/transaction/user/${data.id}/bank/topup`, 
+        let res = await axios.post(`${Config.api.production.baseHost}/api/secure/payment/transaction/user/${data.id}/bank/topup`, 
             payload,
             {contentType: 'application/json',  headers: { 'Authorization': header }
         })
@@ -15,7 +15,7 @@ class PseService {
 
     CheckPSEPayRequest = async (transactionData, data) => {
       const header = `Bearer ${localStorage.getItem('token')}`;
-      let res = await axios.put(`${Config.api.staging.baseHost}/api/secure/payment/transactions/${transactionData}/bank/operation/check`,{},
+      let res = await axios.put(`${Config.api.production.baseHost}/api/secure/payment/transactions/${transactionData}/bank/operation/check`,{},
         {contentType: 'application/json',  headers: { 'Authorization': header }
       })
       console.log(res);
@@ -40,7 +40,7 @@ const PSEData = async (data, transaction) => {
         extra_params: {
           bank_code: transaction.bank,
           response_url:
-            'https://staging-movilplata.homeip.net/admin/callback/pse/result/web/0',
+            'https://production-movilplata.homeip.net/admin/callback/pse/result/web/0',
           user: {
             name: transaction.name,
             fiscal_number: parseInt(transaction.dni),

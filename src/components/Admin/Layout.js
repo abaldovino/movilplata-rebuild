@@ -106,20 +106,21 @@ function Layout({ children }, props) {
     }
   }
 
-
+  const Options = [
+    {name: 'Home', url:'/admin/home', icon: '1', disabled: false}, 
+    {name: 'Crear sucursal', url:'/admin/sucursal/create', icon: '2', disabled: false }, 
+    {name: 'Listado de sucursales', url:'/admin/sucursal/index', icon: '3', disabled: false },
+    {name: 'POS', url:'/admin/pos', icon: '4', disabled: false },
+    {name: 'Fidelizacion', url:'/admin/', icon: '5', disabled: true },
+    {name: 'Reporte Diario', url:'/admin/reports/daily', icon: '6', disabled: false },
+    //{name: 'Recarga Empresarial', url:'/admin/recharge', icon: '6', disabled: false }
+  ]
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {[{name: 'Home', url:'/admin/home', icon: '1', disabled: false}, 
-          {name: 'Crear sucursal', url:'/admin/sucursal/create', icon: '2', disabled: false }, 
-          {name: 'Listado de sucursales', url:'/admin/sucursal/index', icon: '3', disabled: false },
-          {name: 'POS', url:'/admin/pos', icon: '4', disabled: false },
-          {name: 'Fidelizacion', url:'/admin/', icon: '5', disabled: true },
-          {name: 'Reporte Diario', url:'/admin/reports/daily', icon: '6', disabled: false },
-          {name: 'Recarga Empresarial', url:'/admin/recharge', icon: '6', disabled: false }
-        ].map((hash, index) => (
+        {Options.map((hash, index) => (
           <ListItem button component={Link} to={hash.url} key={index} disabled={hash.disabled}>
             <ListItemIcon>
               { renderSwitch(hash.icon) }

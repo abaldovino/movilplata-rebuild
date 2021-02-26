@@ -279,7 +279,6 @@ const CreateSucursal = props => {
                   name="city"
                   onChange={handleChange}
                   select
-                  // eslint-disable-next-line react/jsx-sort-props
                   SelectProps={{ native: true }}
                   variant="outlined"
                   inputRef={register({ required: true })}>

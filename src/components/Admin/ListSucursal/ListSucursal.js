@@ -245,10 +245,14 @@ const ListSucursal = props => {
         setLoading(false);
         redirectToHome();
       } else {
-        
+        console.log(response.data);
         const rows = response.data.map(( sucursal ) => {
           if(sucursal != null){
-            return createData(sucursal.name, sucursal.city.name, sucursal.address, sucursal.email)
+            let sucursal_name = sucursal.name != null ? sucursal.name : '';
+            let sucursal_city = sucursal.city != null ? sucursal.city.name : '';
+            let sucursal_address = sucursal.address != null ?  sucursal.address : '';
+            let sucursal_email = sucursal.email != null ? sucursal.email : '';
+            return createData(sucursal_name, sucursal_city, sucursal_address, sucursal_email);
           }else{
             return createData('invalid data', 'invalid data', 'invalid data', 'invalid data')
           }

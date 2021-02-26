@@ -60,8 +60,8 @@ function App() {
             <Route path="/terms" component={ Terms } />
             <Route path="/login" component={ Auth } />
             <PrivateRoute path="/admin/home" component={ () => <Admin userData={ authTokens } /> } />
-            <PrivateRoute path="/admin/sucursal/create" component={ () => <CreateSucursal userData={ authTokens } /> } />
-            <PrivateRoute path="/admin/sucursal/index" component={ () => <IndexSucursal userData={ authTokens } history={history}/> } />
+            <PrivateRoute path="/admin/sucursal/create" component={ () => <CreateSucursal userData={ authTokens } history={history} /> } />
+            <PrivateRoute path="/admin/sucursal/index" component={ () => <IndexSucursal userData={ authTokens } history={history} /> } />
             <PrivateRoute path="/admin/pos" component={ () => <Pos userData={ authTokens } /> } />
             <PrivateRoute path="/admin/reports/daily" component={ () => <DailyReport userData={ authTokens } /> } />
             <PrivateRoute path="/admin/recharge" component={ () => <Recharge userData={ authTokens } /> } />

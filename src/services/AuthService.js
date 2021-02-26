@@ -5,7 +5,7 @@ import qs from 'query-string'
 
 class AuthService {
   async login(data){
-    let res = await axios.post(`${Config.api.staging.baseHost}/api/user/login?username=${data.username}&password=${data.password}`)
+    let res = await axios.post(`${Config.api.production.baseHost}/api/user/login?username=${data.username}&password=${data.password}`)
     res.data.data.password = data.password //temporal fix TODO implement oauth token
     return res.data
   }
@@ -14,7 +14,7 @@ class AuthService {
     const headers = {
       'Content-Type': 'application/json'
     }
-    let res = await axios.post(`${Config.api.staging.baseHost}/api/user/register/seller`, getFormatData(data), {
+    let res = await axios.post(`${Config.api.production.baseHost}/api/user/register/seller`, getFormatData(data), {
       headers: headers
     })
     .then(function (response) {
@@ -30,7 +30,7 @@ class AuthService {
   async getToken(data) {
     const {username, password} = data;
     console.log('body', data)
-    console.log('URL:', `${Config.apiv2.url}${Config.apiv2.login_url}`);
+    console.log('URL:', `${Config.apiv2.url_secured}${Config.apiv2.login_url}`);
 
     const requestBody = {
       username,
@@ -38,7 +38,7 @@ class AuthService {
       grant_type: 'password',
       scope: 'openid offline_access',
       client_id: Config.apiv2.client_id,
-      client_secret: Config.apiv2.client_secret_staging,
+      client_secret: Config.apiv2.client_secret_production,
     }
 
     const headerConfig = {
@@ -49,7 +49,7 @@ class AuthService {
 
     var status = 200;
 
-    const loginResponse = await axios.post(`${Config.apiv2.url}${Config.apiv2.login_url}`, qs.stringify(requestBody), headerConfig)
+    const loginResponse = await axios.post(`${Config.apiv2.login_url_production}${Config.apiv2.login_url}`, qs.stringify(requestBody), headerConfig)
     .then(function (response) {
       return response.data.access_token;
     })
@@ -65,7 +65,7 @@ class AuthService {
   async getUserData (data){
     const {username} = data;
     const header = `Bearer ${localStorage.getItem('token')}`;
-    const userData = await axios.get(`${Config.apiv2.url_secured_staging}${Config.apiv2.get_user}username=${username}`, { headers: { Authorization: header } })
+    const userData = await axios.get(`${Config.apiv2.url_secured}${Config.apiv2.get_user}username=${username}`, { headers: { Authorization: header } })
     .then(function (response) {
       return response;
     })

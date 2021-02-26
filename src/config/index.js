@@ -15,6 +15,7 @@ const config = {
   },
   apiv2: {
     url: 'https://staging-movilplata.homeip.net/auth',
+    login_url_production: 'http://216.55.185.219:7080/auth',
     client_id: 'movilplata_client',
     client_secret_production: 'd5c13573-ca4f-45fe-af94-a020d2ec1c79',
     client_secret_staging: '73876220-c6e7-4f6e-b1cd-a01f703f9bd4',

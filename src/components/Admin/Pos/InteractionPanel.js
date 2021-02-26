@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function InteractionPanel(props) {
   const userData = props.userData ? props.userData: null
-  const permision = userData.role.permissions.find(el=> el === "commerce:querying") ? true : false
+  const permision = userData.userRoles.find(el=> el.name === "Commerce Admin") ? true : false
   let masiveButton;
   let column = 4;
 

@@ -286,7 +286,7 @@ const RetiroForm = props => {
         <Divider />
         <CardActions>
         {userSet ? (
-          <Button className={classes.saveButton} type="submit" variant="contained" > Recargar </Button>
+          <Button className={classes.saveButton} type="submit" variant="contained" > Retiro </Button>
         ) : (
           <Button className={classes.saveButton} type="button" variant="contained" onClick={() => handleBlur()} > { buttonText } </Button>
         ) }
