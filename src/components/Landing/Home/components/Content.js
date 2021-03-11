@@ -146,7 +146,10 @@ export default function Content() {
             <p className="mt-1">
               <p  className="small mt-0 border-0">Registrandote, estas indicando que aceptas nuestros 
               <Link to='/terms'><a className="ps-hero__content__link">Terminos de uso</a></Link> y <Link to='/privacy'><a>la politica de privacidad</a></Link>.</p>
-              MovilPlata 2019 | Privacy Policy | powered by CPS
+              MovilPlata 2019 | Privacy Policy | powered by CPS |
+              Dirección: Vía 40#71-124
+              Ciudad: Barranquilla
+              | Correo de contacto: Notificaciones@movilplata.com
             </p>
           </div>
         </div>
