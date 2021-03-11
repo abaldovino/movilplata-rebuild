@@ -103,7 +103,7 @@ const MasiveRecharge = props => {
   } 
 
   const receiveNotificationSuccess = (username) => {
-    const eb = new Vertx("https://staging-movilplata.homeip.net:18081/api/notification/eventbus");
+    const eb = new Vertx("https://movilplata.com/api/notification/eventbus");
     eb.handlers = `wallet-service-address-${username}`
     eb.onopen = () => {
       const token = eb.handlers;

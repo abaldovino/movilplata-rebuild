@@ -149,13 +149,14 @@ const RetiroForm = props => {
   }
 
   const receiveConfirmation = (branchToken) => {
-    const eb = new Vertx("http://104.198.149.31:18081/api/notification/eventbus");
-    eb.handlers = branchToken  
+    const eb = new Vertx("https://movilplata.com/api/notification/eventbus");
+    eb.handlers = `wallet-service-address-${Date.now()}`
     eb.onopen = () => {
       const token = eb.handlers;
       console.log('receiveConfirmation', token)
       eb.handlers = {};
       eb.registerHandler(token, function(error, message) {
+        debugger
         console.log('Errpr', error);
         console.log('handler', message);
         console.log('handler', message.headers);
@@ -169,6 +170,7 @@ const RetiroForm = props => {
             eb.close()
             break
           default:
+            debugger
             toast.error("Error contacta al proveedor. !", toastError); 
             eb.close()
         }

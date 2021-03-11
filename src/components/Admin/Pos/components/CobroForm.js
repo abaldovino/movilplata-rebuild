@@ -125,7 +125,7 @@ const CobroForm = props => {
     })
   }
   const receiveNotificationSuccess = (branchToken) => {
-    const eb = new Vertx("http://104.198.149.31:18081/api/notification/eventbus");
+    const eb = new Vertx("https://movilplata.com/api/notification/eventbus");
     eb.handlers = branchToken
     eb.onopen = () => {
       const token = eb.handlers;

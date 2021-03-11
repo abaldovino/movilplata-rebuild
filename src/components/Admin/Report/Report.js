@@ -83,16 +83,17 @@ export default function DailyReport(props) {
   const downloadReport = () => {
     const encodedString = new Buffer(`:`).toString('base64');
     const basicAuth = 'Basic ' + encodedString;
+    const header = `Bearer ${localStorage.getItem('token')}`;
     setLoading(true)
-    Axios.get(`http://104.198.149.31:18083/api/secure/report/transactions?type=${type}&sd=${startDate}&ed=${endDate}&commerce_id=${currentComerce.id}&branch_id=${sucursal}`,
-    { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': basicAuth }, responseType: 'blob'})
+    Axios.get(`https://movilplata.com/api/secure/report/transactions?type=${type}&sd=${startDate}&ed=${endDate}&commerce_id=${currentComerce.id}&branch_id=${sucursal}`,
+    { withCredentials: true, contentType: 'application/json',  headers: { 'Authorization': header }, responseType: 'blob'})
     .then(function (response) {
       // handle success
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      //link.setAttribute('download', 'file.pdf');
-      link.setAttribute('target', '_blank');
+      link.setAttribute('download', `reporte-${sucursal}-${type}-${startDate}-${endDate}-${Date.now()}.pdf`);
+      //link.setAttribute('target', '_blank');
       document.body.appendChild(link);
       link.click();
       setLoading(false)
